@@ -67,9 +67,9 @@ waits for its tailnet HTTPS origin, and stops that process with the session. Use
 /copy-remote-url
 ```
 
-to copy the remote bootstrap link. Without `--tailscale`, that command clearly
-reports that the flag is required. If Tailscale is unavailable or disconnected,
-the loopback UI continues to work.
+to copy the remote bootstrap link. The command is only registered when
+`--tailscale` is active. If Tailscale is unavailable or disconnected, the
+loopback UI continues to work.
 
 Enabling this flag lets devices allowed by your tailnet policy reach a page that
 can read the current transcript and send messages to Pi. Review Tailscale ACLs

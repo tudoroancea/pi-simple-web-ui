@@ -585,30 +585,24 @@ export default function webUiSimpleExtension(pi: ExtensionAPI): void {
     },
   });
 
-  pi.registerCommand("copy-remote-url", {
-    description: "Copy a tailnet-authenticated Pi Web UI link",
-    handler: async (_args: string, commandContext: ExtensionCommandContext): Promise<void> => {
-      if (!pi.getFlag("tailscale")) {
-        commandContext.ui.notify(
-          "Remote Web UI access is disabled. Start Pi with --tailscale to enable it.",
-          "error",
-        );
-        return;
-      }
-      if (!remoteOrigin) {
-        commandContext.ui.notify(
-          tailscaleServe
-            ? "The remote Web UI is still starting. Try again shortly."
-            : "The remote Web UI is unavailable. Check that Tailscale is installed and connected.",
-          "error",
-        );
-        return;
-      }
-      await copyUrl(commandContext, remoteOrigin);
-    },
-  });
-
   pi.on("session_start", async (_event, ctx) => {
+    if (pi.getFlag("tailscale")) {
+      pi.registerCommand("copy-remote-url", {
+        description: "Copy a tailnet-authenticated Pi Web UI link",
+        handler: async (_args: string, commandContext: ExtensionCommandContext): Promise<void> => {
+          if (!remoteOrigin) {
+            commandContext.ui.notify(
+              tailscaleServe
+                ? "The remote Web UI is still starting. Try again shortly."
+                : "The remote Web UI is unavailable. Check that Tailscale is installed and connected.",
+              "error",
+            );
+            return;
+          }
+          await copyUrl(commandContext, remoteOrigin);
+        },
+      });
+    }
     if (ctx.mode !== "tui" && ctx.mode !== "rpc") return;
     if (tailscaleServe) await tailscaleServe.close();
     if (server) await server.close();
