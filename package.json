@@ -41,6 +41,7 @@
   "pi": {
     "extensions": [
       "./src/index.ts"
-    ]
+    ],
+    "image": "https://raw.githubusercontent.com/tudoroancea/pi-simple-web-ui/main/docs/assets/pi-simple-web-ui.png"
   }
 }

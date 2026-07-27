@@ -9,6 +9,8 @@ steering, or queueing a short message. Its objective is to stay small,
 understandable, and close to Pi's own HTML-export presentation rather than grow
 into a general remote-control dashboard.
 
+![Pi Simple Web UI showing the same session in light and dark modes](docs/assets/pi-simple-web-ui.png)
+
 ## What it is—and is not
 
 It renders the active branch as a single-column transcript: user and assistant
@@ -26,54 +28,52 @@ lineage keeps transcripts familiar and intentionally constrains the design. The
 active Pi theme is converted to CSS variables at runtime; automatic light/dark
 theme pairs follow the browser color scheme.
 
+## Installation
+
+Install the extension for future Pi sessions:
+
+```sh
+pi install npm:pi-simple-web-ui
+```
+
+Or load it for one session without installing it:
+
+```sh
+pi -e npm:pi-simple-web-ui
+```
+
 ## Usage
 
-A git Pi package needs no build step. To run only this package, without loading
-auto-discovered extensions, use exactly:
+The extension starts automatically in TUI and RPC modes. It serves the active
+session on an ephemeral loopback port and provides this command:
 
-```sh
-pi --no-extensions -e git:github.com/tudoroancea/pi-simple-web-ui
-```
-
-From a local checkout, the equivalent bare invocation is:
-
-```sh
-pi --no-extensions -e .
-```
-
-The extension starts in TUI and RPC modes, binds an ephemeral port on
-`127.0.0.1`, and reports the local base URL. In the TUI, run:
-
-```text
-/copy-url
-```
-
-This copies a complete bootstrap link. Open it in a browser on the same machine.
-In RPC mode, the command returns the link in a notification instead of using the
-host clipboard.
+- `/copy-url` — copy an authenticated local Web UI link. Open it in a browser on
+  the same machine. In RPC mode, Pi returns the link in a notification instead
+  of using the host clipboard.
 
 ### Optional Tailscale Serve
 
-Remote serving is disabled by default. Opt in explicitly:
+Remote access is disabled by default. Enable it for an installed extension with:
 
 ```sh
-pi --no-extensions -e git:github.com/tudoroancea/pi-simple-web-ui --tailscale
+pi --tailscale
 ```
 
-With `--tailscale`, the extension starts the system `tailscale serve` command,
-waits for its tailnet HTTPS origin, and stops that process with the session. Use:
+For one-off usage, combine the flag with `-e`:
 
-```text
-/copy-remote-url
+```sh
+pi -e npm:pi-simple-web-ui --tailscale
 ```
 
-to copy the remote bootstrap link. The command is only registered when
-`--tailscale` is active. If Tailscale is unavailable or disconnected, the
-loopback UI continues to work.
+The flag starts the system `tailscale serve` command, waits for its tailnet HTTPS
+origin, and stops it when the Pi session shuts down. It also registers:
 
-Enabling this flag lets devices allowed by your tailnet policy reach a page that
-can read the current transcript and send messages to Pi. Review Tailscale ACLs
-and grants before enabling it; membership in a tailnet is not automatically the
+- `/copy-remote-url` — copy an authenticated link for the tailnet HTTPS origin.
+
+If Tailscale is unavailable or disconnected, the loopback UI and `/copy-url`
+continue to work. Enabling remote access lets devices allowed by your tailnet
+policy read the current transcript and send messages to Pi. Review Tailscale
+ACLs and grants before enabling it; tailnet membership is not automatically the
 right authorization boundary for an agent session.
 
 ## Composer and display controls
