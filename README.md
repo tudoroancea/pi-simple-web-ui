@@ -1,6 +1,6 @@
 # Pi Simple Web UI
 
-> **A minimal check-in companion for an active [Pi](https://github.com/badlogic/pi-mono)
+> **A minimal check-in companion for an active [Pi](https://github.com/earendil-works/pi)
 > session—not a complete or hardened web UI.**
 
 Pi Simple Web UI gives you a narrow browser view of the session currently open
